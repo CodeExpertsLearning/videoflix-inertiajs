@@ -29,4 +29,11 @@ require __DIR__ . '/auth.php';
 Route::middleware(['auth', 'user.is.admin'])->group(function () {
 
     Route::resource('contents', \App\Http\Controllers\Media\ContentController::class);
+
+    Route::get('/contents/{content}/videos/upload', [\App\Http\Controllers\Media\VideoController::class, 'upload'])->name('videos.upload');
+    Route::post('/{content}/videos', [\App\Http\Controllers\Media\VideoController::class, 'store'])->name('videos.store');
+    Route::post('/contents/{content}/videos/{video}/process', [\App\Http\Controllers\Media\VideoController::class, 'process'])->name('videos.upload.process');
+    Route::delete('/videos/{video}', [\App\Http\Controllers\Media\VideoController::class, 'destroy'])->name('videos.destroy');
+
+    Route::match(['PUT', 'PATCH'], '/contents/{content}/videos/{video}', [\App\Http\Controllers\Media\VideoController::class, 'update'])->name('videos.update');
 });

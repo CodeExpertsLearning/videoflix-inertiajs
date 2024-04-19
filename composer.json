@@ -13,6 +13,7 @@
         "laravel/tinker": "^2.9",
         "pbmedia/laravel-ffmpeg": "^8.5",
         "pion/laravel-chunk-upload": "^1.5",
+        "spatie/laravel-sluggable": "^3.6",
         "tightenco/ziggy": "^2.0"
     },
     "require-dev": {

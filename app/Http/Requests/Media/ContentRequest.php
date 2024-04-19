@@ -22,7 +22,10 @@ class ContentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'title' => 'required',
+            'description' => 'nullable|min:10',
+            'body' => 'required',
+            'type' => 'required',
         ];
     }
 }
