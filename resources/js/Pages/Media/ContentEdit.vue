@@ -9,8 +9,49 @@ import TextInput from "@/Components/TextInput.vue";
 import AutheticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, useForm, usePage } from "@inertiajs/vue3";
 import NavLink from "@/Components/NavLink.vue";
+import { onMounted, reactive } from "vue";
 
 defineProps({ content: Object });
+
+onMounted(() => {
+    Echo.channel("videos")
+        .listen(".App\\Events\\VideoEncodingStart", (e) => {
+            const video = getVideoById(e.videoId);
+
+            if (!video) return;
+
+            video.encoding = true;
+        })
+        .listen(".App\\Events\\VideoEncodingProgress", (e) => {
+            const video = getVideoById(e.videoId);
+
+            if (!video) return;
+
+            if (!video.encoding) video.encoding = true;
+
+            video.progress = e.percentage;
+        })
+        .listen(".App\\Events\\VideoEncodingFinished", (e) => {
+            const video = getVideoById(e.videoId);
+
+            if (!video) return;
+
+            video.encoding = false;
+        })
+        .listen(".App\\Events\\VideoThumbGenerated", (e) => {
+            const video = getVideoById(e.videoId);
+
+            if (!video) return;
+
+            video.thumb = e.thumb;
+        });
+});
+
+const videos = reactive(usePage().props.content.videos);
+
+const getVideoById = (id) => {
+    return videos.find((video) => video.id == id);
+};
 
 const form = useForm(usePage().props.content);
 
@@ -134,6 +175,45 @@ const submit = () => {
                                 </div>
                             </form>
                         </div>
+                        <!-- Componentizar trecho abaixo-->
+                        <div
+                            v-if="videos.length"
+                            class="p-7 mt-10 pt-10 border-t border-gray-500 grid grid-cols-4 gap-3"
+                        >
+                            <div
+                                class="w-[230px]"
+                                v-for="video of videos"
+                                :key="video.id"
+                            >
+                                <img
+                                    :src="`/storage/${video.thumb}`"
+                                    :alt="`Capa vídeo ${video.name}`"
+                                    class="p-1 bg-white rounded shadow-xl mb-4"
+                                />
+                                <h2
+                                    class="font-white font-bold text-xl mb-4 text-clip overflow-hidden"
+                                >
+                                    {{ video.name }}
+                                </h2>
+
+                                <div class="space-y-1" v-if="video.encoding">
+                                    <div
+                                        class="bg-gray-100 shadow-inner h-3 rounded overflow-hidden"
+                                    >
+                                        <div
+                                            class="bg-green-500 h-full"
+                                            v-bind:style="{
+                                                width: `${video.progress}%`,
+                                            }"
+                                        ></div>
+                                    </div>
+                                    <div class="text-sm text-white font-bold">
+                                        Convertendo vídeo
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Fim trecho Componentizar -->
                     </div>
                 </div>
             </div>

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -17,9 +18,24 @@ class Video extends Model
         'thumb', 'slug', 'is_processed'
     ];
 
+    protected $appends = ['encoding', 'progress'];
+
     public function content(): BelongsTo
     {
         return $this->belongsTo(Content::class);
+    }
+
+    /**
+     * Accessors & Mutators
+     */
+    public function encoding(): Attribute
+    {
+        return new Attribute(get: fn () => false);
+    }
+
+    public function progress(): Attribute
+    {
+        return new Attribute(get: fn () => 0);
     }
 
     /**

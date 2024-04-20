@@ -5,8 +5,40 @@ import AutheticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import TextInputFile from "@/Components/TextInputFile.vue";
 import ListUpload from "@/Components/ListUpload.vue";
 
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { createUpload } from "@mux/upchunk";
+
+onMounted(() => {
+    Echo.channel("videos")
+        .listen(".App\\Events\\VideoEncodingStart", (e) => {
+            const video = getVideoById(e.videoId);
+
+            if (!video) return;
+
+            video.encoding = true;
+        })
+        .listen(".App\\Events\\VideoEncodingProgress", (e) => {
+            const video = getVideoById(e.videoId);
+
+            if (!video) return;
+
+            video.encodingProgress = e.percentage;
+        })
+        .listen(".App\\Events\\VideoEncodingFinished", (e) => {
+            const video = getVideoById(e.videoId);
+
+            if (!video) return;
+
+            video.encoding = false;
+        })
+        .listen(".App\\Events\\VideoThumbGenerated", (e) => {
+            const video = getVideoById(e.videoId);
+
+            if (!video) return;
+
+            video.thumb = e.thumb;
+        });
+});
 
 defineProps({ content: {} });
 

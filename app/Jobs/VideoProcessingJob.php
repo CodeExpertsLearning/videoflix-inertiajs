@@ -2,6 +2,9 @@
 
 namespace App\Jobs;
 
+use App\Events\VideoEncodingFinished;
+use App\Events\VideoEncodingProgress;
+use App\Events\VideoEncodingStart;
 use App\Models\Video;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
@@ -31,8 +34,10 @@ class VideoProcessingJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $nameNewVideo = str_replace(strrchr($this->video->video, '.'), '', $this->video->video) . '.m3u8';
+        //Indicar quando o processo iniciar
+        VideoEncodingStart::dispatch($this->video);
 
+        $nameNewVideo = str_replace(strrchr($this->video->video, '.'), '', $this->video->video) . '.m3u8';
 
         $lowBitrateFormat  = (new X264)->setKiloBitrate(500);
         $midBitrateFormat  = (new X264)->setKiloBitrate(1500);
@@ -45,7 +50,7 @@ class VideoProcessingJob implements ShouldQueue
             ->addFormat($midBitrateFormat)
             ->addFormat($highBitrateFormat)
             ->onProgress(function ($progress) {
-                //VideoEncodingProgress::dispatch($this->video, $progress);
+                VideoEncodingProgress::dispatch($this->video, $progress);
             })
             ->toDisk('videos_processed')
             ->save($this->video->code . '/' . $nameNewVideo);
@@ -57,5 +62,7 @@ class VideoProcessingJob implements ShouldQueue
             'video' => $nameNewVideo,
             'is_processed' => 1
         ]);
+
+        VideoEncodingFinished::dispatch($this->video);
     }
 }

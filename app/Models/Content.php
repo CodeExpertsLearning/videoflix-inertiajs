@@ -24,6 +24,16 @@ class Content extends Model
     }
 
     /**
+     * Scopes
+     */
+    public function scopeActiveVideos($query)
+    {
+        return $this->videos()
+            ->whereNotNull('code')
+            ->whereisProcessed(true);
+    }
+
+    /**
      * Sluggable Config
      */
     public function getSlugOptions(): SlugOptions

@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -34,7 +35,8 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
-            'csrf_token' => fn () => csrf_token()
+            'csrf_token' => fn () => csrf_token(),
+            'is_admin' => fn () => auth()->user()?->role == User::ROLE_ADMIN
         ];
     }
 }

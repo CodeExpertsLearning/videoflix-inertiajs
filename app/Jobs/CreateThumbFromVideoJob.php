@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Events\VideoThumbGenerated;
 use App\Models\Video;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
@@ -41,6 +42,6 @@ class CreateThumbFromVideoJob implements ShouldQueue
             'thumb' => $thumb
         ]);
 
-        //VideoThumbGenerated::dispatch($this->video);
+        VideoThumbGenerated::dispatch($this->video);
     }
 }

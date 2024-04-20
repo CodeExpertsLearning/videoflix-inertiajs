@@ -14,10 +14,6 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -25,6 +21,9 @@ Route::middleware(['auth'])->group(function () {
 });
 
 require __DIR__ . '/auth.php';
+
+Route::get('/dashboard', \App\Http\Controllers\Actions\DashboardAction::class)
+    ->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware(['auth', 'user.is.admin'])->group(function () {
 
@@ -37,3 +36,22 @@ Route::middleware(['auth', 'user.is.admin'])->group(function () {
 
     Route::match(['PUT', 'PATCH'], '/contents/{content}/videos/{video}', [\App\Http\Controllers\Media\VideoController::class, 'update'])->name('videos.update');
 });
+
+Route::get('/watch/{content:slug}', \App\Http\Controllers\Actions\PlayerAction::class)
+    ->middleware(['auth'])
+    ->name('video.player');
+
+
+Route::get('resources/{code}/{video}', function ($code, $video = null) {
+    $video = $code . '/' . $video;
+
+    return \Illuminate\Support\Facades\Storage::disk('videos_processed')
+        ->response(
+            $video,
+            null,
+            [
+                'Content-Type' => 'application/x-mpegURL',
+                'isHls' => true
+            ]
+        );
+})->name('stream_player')->middleware(['auth']);

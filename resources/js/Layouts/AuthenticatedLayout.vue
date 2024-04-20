@@ -5,8 +5,11 @@ import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
 import NavLink from "@/Components/NavLink.vue";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
-import { Link } from "@inertiajs/vue3";
+import CopyFooter from "@/Components/CopyFooter.vue";
 
+import { Link, usePage } from "@inertiajs/vue3";
+
+defineProps({ is_admin: { Type: Boolean } });
 const showingNavigationDropdown = ref(false);
 </script>
 
@@ -43,6 +46,7 @@ const showingNavigationDropdown = ref(false);
                                 <NavLink
                                     :href="route('contents.index')"
                                     :active="route().current('contents.*')"
+                                    v-if="usePage().props.is_admin"
                                 >
                                     Conteúdo/Media
                                 </NavLink>
@@ -157,6 +161,7 @@ const showingNavigationDropdown = ref(false);
                         <ResponsiveNavLink
                             :href="route('contents.index')"
                             :active="route().current('contents.*')"
+                            v-if="usePage().props.is_admin"
                         >
                             Conteúdo/Media
                         </ResponsiveNavLink>
@@ -207,6 +212,8 @@ const showingNavigationDropdown = ref(false);
             <main>
                 <slot />
             </main>
+
+            <CopyFooter />
         </div>
     </div>
 </template>
