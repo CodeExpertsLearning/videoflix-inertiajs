@@ -6,9 +6,11 @@ defineProps({ content: {}, videos: {} });
 </script>
 
 <template>
-    <PlayerList v-if="content.type === 2" :videos="videos" />
+    <div class="w-full">
+        <PlayerList v-if="content.type === 2" :videos="videos" />
 
-    <PlayerFull v-if="content.type === 1" />
+        <PlayerFull v-if="content.type === 1" />
+    </div>
 </template>
 
 <style scoped></style>

@@ -32,11 +32,11 @@ onMounted(() => {
                 >
                 / <strong>{{ video.name }}</strong>
             </div>
-            <div class="w-full flex justify-between">
+            <div class="max-w-full flex justify-between">
                 <video
                     ref="playerEl"
                     id="player"
-                    class="mt-8 ml-10 w-full h-[780px]"
+                    class="mt-8 ml-10 max-w-full h-[780px]"
                     controls
                 ></video>
             </div>
