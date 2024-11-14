@@ -39,11 +39,17 @@ defineProps({ contents: {} });
                             class="w-full md:grid md:grid-cols-3 lg:grid-cols-4 md:gap-0.5 mb-10 px-4"
                         >
                             <div
-                                class="w-[280px] h-[380px] mb-8 bg-gray-900 rounded shadow-lg shadow-gray-800 hover:shadow-gray-400 transition duration-300 ease-in-out"
+                                class="w-[280px] h-[380px] mb-16 bg-gray-900 rounded shadow-lg shadow-gray-800 hover:shadow-gray-400 transition duration-300 ease-in-out"
                                 v-for="content of contentGroup"
                                 :key="content.id"
                             >
-                                <img
+                                <img v-if="content.cover"
+                                    :src="`/storage/${content.cover}`"
+                                    :alt="`Capa do conteúdo: ${content.title}`"
+                                    class="block mb-8 rounded-t w-[280px] h-[40%]"
+                                />
+
+                                <img v-else
                                     src="/storage/no-photo.jpg"
                                     :alt="`Capa do conteúdo: ${content.title}`"
                                     class="block mb-8 rounded-t w-[280px] h-[40%]"

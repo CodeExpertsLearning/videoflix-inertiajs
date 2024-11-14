@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Media;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Media\ContentRequest;
 use App\Models\Content;
-use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 class ContentController extends Controller
 {
@@ -36,7 +37,10 @@ class ContentController extends Controller
      */
     public function store(ContentRequest $request)
     {
-        $content = $this->content->create($request->validated());
+        $data = $request->validated();
+        $data['cover'] = $request->photo && $request->photo instanceof UploadedFile ? $request->photo->store('media', 'public') : null;
+
+        $content = $this->content->create($data);
 
         return redirect()->route('contents.edit', $content);
     }
@@ -64,8 +68,17 @@ class ContentController extends Controller
      */
     public function update(ContentRequest $request, string $id)
     {
+        $data = $request->validated();
         $content = $this->content->findOrFail($id);
-        $content->update($request->validated());
+
+        if($request->photo) {
+            if($content->cover)
+                Storage::disk('public')->delete($content->cover);
+
+            $data['cover'] = $request->photo->store('media', 'public');
+        }
+
+        $content->update($data);
 
         redirect()->back();
     }

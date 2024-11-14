@@ -26,6 +26,7 @@ class ContentRequest extends FormRequest
             'description' => 'nullable|min:10',
             'body' => 'required',
             'type' => 'required',
+            'photo' => 'nullable|image'
         ];
     }
 }

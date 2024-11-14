@@ -8,13 +8,14 @@ import TextInput from "@/Components/TextInput.vue";
 
 import AutheticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, useForm } from "@inertiajs/vue3";
-import NavLink from "@/Components/NavLink.vue";
+import { ref } from "vue";
 
 const form = useForm({
     title: "",
     description: "",
     body: "",
     type: "",
+    photo: ""
 });
 
 const opts = [
@@ -25,6 +26,44 @@ const opts = [
 const submit = () => {
     form.post(route("contents.store"), {
         onFinish: () => form.reset(),
+    });
+};
+
+const filesFront = ref([]);
+const isDragged = ref(false);
+
+const resetFilesProp = () => {
+    form.photo = [];
+    filesFront.value = [];
+};
+
+const mainHandleImages = (target) => {
+    let images = target;
+
+    form.photo = images.length ? images[0] : [];
+
+    mountFilesFront(images);
+};
+
+const imagesHandle = (e) => {
+    resetFilesProp();
+    mainHandleImages(e.target.files);
+};
+
+const handleDragEve = (e) => {
+    resetFilesProp();
+    mainHandleImages(e.dataTransfer.files);
+    isDragged.value = false;
+};
+
+const mountFilesFront = (images) => {
+    Array.from(images).forEach((image) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(image);
+
+        reader.onload = (e) => {
+            filesFront.value.push(e.target.result);
+        };
     });
 };
 </script>
@@ -118,6 +157,54 @@ const submit = () => {
                                         class="mt-2"
                                         :message="form.errors.type"
                                     />
+                                </div>
+
+                                <div class="mt-4">
+                                    <div class="w-full py-10 text-left">
+                                        <h2 class="font-bold">Foto de Capa</h2>
+                                    </div>
+                                    <div class="flex justify-around">
+                                        <div class="w-[48%] flex items-center justify-center ">
+                                            <InputLabel
+                                                @dragover.prevent="isDragged = true"
+                                                @dragleave.prevent="isDragged = false"
+                                                @drop.prevent="handleDragEve"
+                                                for="photos"
+                                                value="Clique ou arraste a foto da capa (1280x720)"
+                                                class="w-full h-28 border-2 border-dashed border-gray-500 bg-gray-700 rounded flex items-center justify-center"
+                                                :class="{
+                                            'bg-gray-900': isDragged,
+                                        }"
+                                            />
+
+                                            <TextInput
+                                                id="photos"
+                                                type="file"
+                                                class="sr-only"
+                                                @change="imagesHandle"
+                                            />
+
+                                            <InputError
+                                                class="mt-2"
+                                                :message="form.errors.photo"
+                                            />
+                                        </div>
+
+                                        <div
+                                            class="w-[48%] border-l border-gray-900 mt-10 pt-10 px-10 flex items-center justify-center"
+                                            v-if="filesFront.length"
+                                        >
+                                            <div
+                                                v-for="(img, key) of filesFront"
+                                                :key="key"
+                                            >
+                                                <img
+                                                    :src="img"
+                                                    class="p-1 bg-white shadow rounded"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div class="mt-8">

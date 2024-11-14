@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fdf776f633139337540a14bd966a90e8",
+    "content-hash": "bc845b3faef127a0854f41a702cc92e7",
     "packages": [
         {
             "name": "brick/math",
@@ -1210,27 +1210,29 @@
         },
         {
             "name": "inertiajs/inertia-laravel",
-            "version": "v1.0.0",
+            "version": "2.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/inertiajs/inertia-laravel.git",
-                "reference": "fcf3d6db1a259a55d8d18cf43fc971202c1f6b0d"
+                "reference": "a836013b5b86b999189b4eb2ce60835cd1329136"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/inertiajs/inertia-laravel/zipball/fcf3d6db1a259a55d8d18cf43fc971202c1f6b0d",
-                "reference": "fcf3d6db1a259a55d8d18cf43fc971202c1f6b0d",
+                "url": "https://api.github.com/repos/inertiajs/inertia-laravel/zipball/a836013b5b86b999189b4eb2ce60835cd1329136",
+                "reference": "a836013b5b86b999189b4eb2ce60835cd1329136",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "laravel/framework": "^8.74|^9.0|^10.0|^11.0",
-                "php": "^7.3|~8.0.0|~8.1.0|~8.2.0|~8.3.0"
+                "laravel/framework": "^10.0|^11.0",
+                "php": "^8.1.0",
+                "symfony/console": "^5.3|^6.0|^7.0"
             },
             "require-dev": {
+                "laravel/pint": "^1.16",
                 "mockery/mockery": "^1.3.3",
-                "orchestra/testbench": "^6.4|^7.0|^8.0|^9.0",
-                "phpunit/phpunit": "^8.0|^9.5.8|^10.4",
+                "orchestra/testbench": "^8.0|^9.0",
+                "phpunit/phpunit": "^10.4|^11.0",
                 "roave/security-advisories": "dev-master"
             },
             "suggest": {
@@ -1273,7 +1275,7 @@
             ],
             "support": {
                 "issues": "https://github.com/inertiajs/inertia-laravel/issues",
-                "source": "https://github.com/inertiajs/inertia-laravel/tree/v1.0.0"
+                "source": "https://github.com/inertiajs/inertia-laravel/tree/2.x"
             },
             "funding": [
                 {
@@ -1281,7 +1283,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-03-09T00:30:58+00:00"
+            "time": "2024-10-18T17:55:17+00:00"
         },
         {
             "name": "laravel/breeze",
@@ -10937,6 +10939,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "inertiajs/inertia-laravel": 20,
         "laravel/reverb": 10
     },
     "prefer-stable": true,

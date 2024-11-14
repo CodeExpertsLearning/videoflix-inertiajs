@@ -31,7 +31,7 @@ const playVideo = (v) => {
     <AuthenticatedLayout>
         <Head :title="`Assistindo: ${titleTab}`" />
         <div class="max-w-7xl mx-auto">
-            <div class="w-full block text-white ml-10 mt-14">
+            <div class="w-full block text-white ml-10 my-14">
                 <Link :href="route('dashboard')" class="underline"
                     >Meus Conteúdos</Link
                 >
@@ -41,12 +41,12 @@ const playVideo = (v) => {
                 <video
                     ref="playerEl"
                     id="player"
-                    class="mt-14 ml-10 h-[480px]"
+                    class="ml-10 h-[480px]"
                     controls
                 ></video>
 
                 <div
-                    class="w-80 top-0 right-0 bg-gray-800 border-l border-gray-900 rounded-xl shadow-xl"
+                    class="w-80 h-[480px] top-0 right-0 bg-gray-800 border-l border-gray-900 rounded-xl shadow-xl overflow-y-auto"
                 >
                     <ul>
                         <li

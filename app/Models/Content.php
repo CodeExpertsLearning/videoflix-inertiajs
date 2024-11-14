@@ -12,7 +12,7 @@ class Content extends Model
 {
     use HasFactory, HasSlug;
 
-    protected $fillable = ['title', 'description', 'body', 'type'];
+    protected $fillable = ['title', 'description', 'body', 'type', 'cover'];
 
     protected $casts = [
         'created_at' => 'date:d/m/Y H:i:s'

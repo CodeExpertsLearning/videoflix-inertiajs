@@ -10,7 +10,8 @@ class DashboardAction extends Controller
 {
     public function __invoke(Content $content)
     {
-        $contents = $content->get()->groupBy('type');
+        $contents = $content->whereHas('videos', fn($query) => $query->whereNotNull('code')->whereisProcessed(true))
+                    ->get()->groupBy('type');
 
         return inertia()->render('Dashboard', compact('contents'));
     }
